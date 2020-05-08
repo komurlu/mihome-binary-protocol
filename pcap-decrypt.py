@@ -39,9 +39,10 @@ MAC_PREFIXES_XIAOMI = frozenset([
     "58:44:98", "64:09:80", "64:B4:73", "64:CC:2E", "68:DF:DD", "74:23:44",
     "74:51:BA", "78:02:F8", "7C:1D:D9", "8C:BE:BE", "98:FA:E3", "9C:99:A0",
     "A0:86:C6", "AC:C1:EE", "AC:F7:F3", "B0:E2:35", "C4:0B:CB", "C4:6A:B7",
-    "D4:97:0B", "F0:B4:29", "F4:8B:32", "F8:A4:5F", "FC:64:BA"
+    "D4:97:0B", "F0:B4:29", "F4:8B:32", "F8:A4:5F", "FC:64:BA","04:CF:8C"
 ])
 
+tokenManual=""; #paste token here. No token in the network anymore.
 
 def get_macs(packet):
     """Get the MAC addresses from a PyShark packet.
@@ -96,9 +97,10 @@ for packet in cap:
     if incoming:
         if len(mp.data) == 0:
             token = mp.md5
-            device_token[mac_src] = token
+            #device_token[mac_src] = token
+            device_token[mac_src] = bytearray.fromhex(tokenManual)
             print("META: device {0} has token: {1}".format(
-                mac_src, token.hex()))
+                mac_src, device_token[mac_src].hex()))
         elif mac_src in device_token:
             decrypted = miio.decrypt(device_token[mac_src], data)
     elif outgoing:
